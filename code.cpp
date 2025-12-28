@@ -1,0 +1,126 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    // Создаем поле для игры
+    char pole[3][3];
+
+    // Заполняем поле пробелами (пустые клетки)
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            pole[i][j] = ' ';
+        }
+    }
+
+    char igrok = 'X'; // Первым ходит крестик
+    int hodov = 0;     // Счетчик ходов
+    bool pobeda = false; // Флаг победы
+
+    cout << "Игра Крестики-нолики!" << endl;
+    cout << "Игрок X и игрок O ходят по очереди" << endl;
+    cout << "Вводите координаты: строка (0-2) и столбец (0-2)" << endl;
+
+    // Главный цикл игры
+    while (hodov < 9 && !pobeda) {
+        // Показываем поле
+        cout << "\nТекущее поле:" << endl;
+        cout << "  0 1 2" << endl;
+        for (int i = 0; i < 3; i++) {
+            cout << i << " ";
+            for (int j = 0; j < 3; j++) {
+                cout << pole[i][j];
+                if (j < 2) cout << "|";
+            }
+            cout << endl;
+            if (i < 2) cout << "  -----" << endl;
+        }
+
+        // Ход игрока
+        int ryad, stolbec;
+        bool pravilno = false;
+
+        while (!pravilno) {
+            cout << "\nХодит игрок " << igrok << endl;
+            cout << "Введите номер строки (0, 1 или 2): ";
+            cin >> ryad;
+            cout << "Введите номер столбца (0, 1 или 2): ";
+            cin >> stolbec;
+
+            // Проверяем, что координаты правильные
+            if (ryad < 0 || ryad > 2 || stolbec < 0 || stolbec > 2) {
+                cout << "Ошибка! Числа должны быть от 0 до 2!" << endl;
+            }
+            // Проверяем, что клетка свободна
+            else if (pole[ryad][stolbec] != ' ') {
+                cout << "Эта клетка уже занята! Выберите другую." << endl;
+            }
+            else {
+                pravilno = true;
+            }
+        }
+
+        // Ставим символ на поле
+        pole[ryad][stolbec] = igrok;
+        hodov++;
+
+        // Проверяем победу по строкам
+        for (int i = 0; i < 3; i++) {
+            if (pole[i][0] == igrok && pole[i][1] == igrok && pole[i][2] == igrok) {
+                pobeda = true;
+            }
+        }
+
+        // Проверяем победу по столбцам
+        for (int j = 0; j < 3; j++) {
+            if (pole[0][j] == igrok && pole[1][j] == igrok && pole[2][j] == igrok) {
+                pobeda = true;
+            }
+        }
+
+        // Проверяем победу по диагоналям
+        if (pole[0][0] == igrok && pole[1][1] == igrok && pole[2][2] == igrok) {
+            pobeda = true;
+        }
+        if (pole[0][2] == igrok && pole[1][1] == igrok && pole[2][0] == igrok) {
+            pobeda = true;
+        }
+
+        // Если победы нет, меняем игрока
+        if (!pobeda) {
+            if (igrok == 'X') {
+                igrok = 'O';
+            }
+            else {
+                igrok = 'X';
+            }
+        }
+    }
+
+    // Выводим финальное поле
+    cout << "\nФинальное поле:" << endl;
+    cout << "  0 1 2" << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << i << " ";
+        for (int j = 0; j < 3; j++) {
+            cout << pole[i][j];
+            if (j < 2) cout << "|";
+        }
+        cout << endl;
+        if (i < 2) cout << "  -----" << endl;
+    }
+
+    // Объявляем результат
+    if (pobeda) {
+        if (igrok == 'X') {
+            cout << "\nПоздравляем! Игрок X победил!" << endl;
+        }
+        else {
+            cout << "\nПоздравляем! Игрок O победил!" << endl;
+        }
+    }
+    else {
+        cout << "\nНичья! Победила дружба!" << endl;
+    }
+
+    return 0;
+}
